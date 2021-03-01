@@ -5,10 +5,13 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.desafio.mercadolivre.shared.UniqueValue;
+
 public class NewUserPostRequest {
 	
 	@Email
 	@NotBlank
+	@UniqueValue(domainClass = User.class, fieldName = "login")
 	private String login;
 	@NotBlank
 	@Length(min = 6)

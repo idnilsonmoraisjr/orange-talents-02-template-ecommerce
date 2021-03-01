@@ -1,6 +1,7 @@
 package com.desafio.mercadolivre.user;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -14,11 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UsersController {
 
+	@PersistenceContext
 	private EntityManager entityManager;
-	
-	UsersController(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
 	
 	@PostMapping
 	@Transactional
