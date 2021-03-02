@@ -1,4 +1,4 @@
-package com.desafio.mercadolivre.user;
+package com.desafio.mercadolivre.category;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
-public class UsersController {
+@RequestMapping("/categories")
+public class CategoriesController {
 
 	@PersistenceContext
 	private EntityManager entityManager;
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> create(@RequestBody @Valid NewUserPostRequest request) {
-		User newUser = request.toModel();
-		entityManager.persist(newUser);
+	public ResponseEntity<?> create(@RequestBody @Valid NewCategoryPostRequest request) {
+		Category newCategory = request.toModel(entityManager);
+		entityManager.persist(newCategory);
 		return ResponseEntity.ok().build();
-	}
+	}	
 }
