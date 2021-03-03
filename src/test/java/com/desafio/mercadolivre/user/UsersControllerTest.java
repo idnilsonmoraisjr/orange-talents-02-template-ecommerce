@@ -59,7 +59,7 @@ class UsersControllerTest {
 	}
 	
 	@Test
-	@DisplayName("Shouldn't create a user when email already exists and return status 404")
+	@DisplayName("Shouldn't create a user when email already exists and return status 400")
 	public void shouldntCreateUser_WhenEmailAlreadyExists() throws Exception {
 		NewUserPostRequest request = new NewUserPostRequest("login@email.com", "123456");
 		
