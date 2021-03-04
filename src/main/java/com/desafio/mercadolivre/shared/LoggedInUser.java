@@ -60,5 +60,4 @@ public class LoggedInUser implements UserDetails {
 	public User get() {
 		return user;
 	}
-	
 }

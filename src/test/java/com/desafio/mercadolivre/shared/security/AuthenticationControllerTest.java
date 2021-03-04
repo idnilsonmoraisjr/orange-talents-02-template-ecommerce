@@ -62,8 +62,8 @@ public class AuthenticationControllerTest {
 		
 		List<User> users =  entityManager.createQuery("select u from User u", User.class).getResultList();
 		
-		assertTrue(users.size() == 1);
-		User user = users.get(0);
+		assertTrue(users.size() == 2);
+		User user = users.get(1);
 		assertEquals(request.getLogin(),user.getLogin());
 		
 		mockMvc.perform(MockMvcRequestBuilders

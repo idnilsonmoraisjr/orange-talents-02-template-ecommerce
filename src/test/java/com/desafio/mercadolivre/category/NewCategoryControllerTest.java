@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -41,6 +42,7 @@ public class NewCategoryControllerTest {
 
 	@Test
 	@DisplayName("Should create a category succesfully whithout parent category and return 200 ")
+	@WithUserDetails("user6@email.com")
 	public void shouldCreateCategorySuccessfully_WhenIdParentCategoryIsEmpty() throws Exception {
 		NewCategoryPostRequest request = new NewCategoryPostRequest();
 		request.setName("Test");
@@ -60,6 +62,7 @@ public class NewCategoryControllerTest {
 	
 	@Test
 	@DisplayName("Should create a category succesfully whit parent category and return 200")
+	@WithUserDetails("user6@email.com")
 	public void shouldCreateCategorySuccessfully_WhenIdParentCategoryIsPresent() throws Exception {
 		NewCategoryPostRequest requestParent = new NewCategoryPostRequest();
 		requestParent.setName("Parent");
@@ -89,6 +92,7 @@ public class NewCategoryControllerTest {
 	
 	@Test
 	@DisplayName("Should fail to create a category when category's name already exists and return 400")
+	@WithUserDetails("user6@email.com")
 	public void shouldFailCreateCategory_WhenNameAlreadyExists() throws Exception {
 		NewCategoryPostRequest request = new NewCategoryPostRequest();
 		request.setName("Test");
@@ -108,6 +112,7 @@ public class NewCategoryControllerTest {
 	
 	@Test
 	@DisplayName("Should fail to create a category when parent's id not exists")
+	@WithUserDetails("user6@email.com")
 	public void shouldFailCreateCategory_WhenParentNotExists() throws Exception {
 		NewCategoryPostRequest requestParent = new NewCategoryPostRequest();
 		requestParent.setName("Test");

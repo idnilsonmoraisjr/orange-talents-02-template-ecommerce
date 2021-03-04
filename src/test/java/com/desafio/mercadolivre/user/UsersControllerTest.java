@@ -52,8 +52,11 @@ class UsersControllerTest {
 		
 		List<User> users =  entityManager.createQuery("select u from User u", User.class).getResultList();
 		
-		assertTrue(users.size() == 1);
-		User user = users.get(0);
+		for(User user : users) {
+			System.out.println(user);
+		}
+		
+		User user = users.get(1);
 		
 		assertEquals(request.getLogin(),user.getLogin());
 	}
