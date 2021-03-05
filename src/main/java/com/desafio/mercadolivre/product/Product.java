@@ -20,8 +20,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.desafio.mercadolivre.category.Category;
 import com.desafio.mercadolivre.user.User;
@@ -53,6 +55,8 @@ public class Product {
 	@NotNull
 	@ManyToOne
 	private User user;
+	@OneToMany( mappedBy = "product", cascade = CascadeType.MERGE)
+	Set<ProductImage> images = new HashSet<>();
 	
 	@Deprecated
 	public Product() {
@@ -113,6 +117,10 @@ public class Product {
 	public User getUser() {
 		return user;
 	}
+	
+	public Set<ProductImage> getImage() {
+		return images;
+	}
 
 	@Override
 	public int hashCode() {
@@ -139,8 +147,31 @@ public class Product {
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", amount=" + amount
+				+ ", productAttributes=" + productAttributes + ", description=" + description + ", productCategory="
+				+ productCategory + ", creationMoment=" + creationMoment + ", user=" + user + ", images=" + images
+				+ "]";
+	}
+
 	public String formatCreationMoment(String pattern) {
 		return this.creationMoment
 				.format(DateTimeFormatter.ofPattern(pattern));
+	}
+
+	public boolean checkProductOwner(User authenticatedUser) {
+		if(!this.user.equals(authenticatedUser)) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+					"This product not belong this user!");
+		}
+		 return true;
+	}
+
+	public void checkImages(Set<String> links) {
+		Set<ProductImage> images = links.stream().map(link -> new ProductImage(link, this))
+				.collect(Collectors.toSet());
+		
+		this.images.addAll(images);
 	}
 }
