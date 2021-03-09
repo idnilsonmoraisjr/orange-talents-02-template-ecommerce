@@ -2,7 +2,7 @@ package com.desafio.mercadolivre.user;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ class UsersControllerTest {
 	@Test
 	@DisplayName("Should create a user succesfully and return status 200")
 	public void shouldCreateUserSuccessfully() throws Exception {
-		NewUserPostRequest request = new NewUserPostRequest("login@email.com", "123456");
+		NewUserRequest request = new NewUserRequest("login@email.com", "123456");
 		
 		mockMvc.perform(post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +65,7 @@ class UsersControllerTest {
 	@Test
 	@DisplayName("Shouldn't create a user when email already exists and return status 400")
 	public void shouldntCreateUser_WhenEmailAlreadyExists() throws Exception {
-		NewUserPostRequest request = new NewUserPostRequest("login@email.com", "123456");
+		NewUserRequest request = new NewUserRequest("login@email.com", "123456");
 		
 		User user = request.toModel();
 		entityManager.persist(user);
@@ -75,7 +76,7 @@ class UsersControllerTest {
 		.andExpect(status().isBadRequest());
 	}
 	
-	private String toJson(NewUserPostRequest request) throws JsonProcessingException {
+	private String toJson(NewUserRequest request) throws JsonProcessingException {
 		return mapper.writeValueAsString(request);
 	}
 }

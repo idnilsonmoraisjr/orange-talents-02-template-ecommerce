@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.desafio.mercadolivre.category.Category;
+import com.desafio.mercadolivre.product.request.ProductAttributeRequest;
 import com.desafio.mercadolivre.user.User;
 
 class ProductTest {

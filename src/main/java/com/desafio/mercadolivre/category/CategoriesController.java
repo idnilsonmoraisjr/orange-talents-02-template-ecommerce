@@ -20,7 +20,7 @@ public class CategoriesController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> create(@RequestBody @Valid NewCategoryPostRequest request) {
+	public ResponseEntity<?> create(@RequestBody @Valid NewCategoryRequest request) {
 		Category newCategory = request.toModel(entityManager);
 		entityManager.persist(newCategory);
 		return ResponseEntity.ok().build();

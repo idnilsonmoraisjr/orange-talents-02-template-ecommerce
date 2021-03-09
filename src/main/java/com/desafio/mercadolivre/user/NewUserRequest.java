@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.desafio.mercadolivre.shared.UniqueValue;
 
-public class NewUserPostRequest {
+public class NewUserRequest {
 	
 	@Email
 	@NotBlank
@@ -17,7 +17,7 @@ public class NewUserPostRequest {
 	@Length(min = 6)
 	private String password;
 	
-	public NewUserPostRequest(
+	public NewUserRequest(
 			@Email @NotBlank String login,
 			@NotBlank @Length(min = 6) String password) {
 		this.login = login;

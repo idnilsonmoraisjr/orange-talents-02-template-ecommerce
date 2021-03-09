@@ -20,7 +20,7 @@ public class UsersController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> create(@RequestBody @Valid NewUserPostRequest request) {
+	public ResponseEntity<?> create(@RequestBody @Valid NewUserRequest request) {
 		User newUser = request.toModel();
 		entityManager.persist(newUser);
 		return ResponseEntity.ok().build();

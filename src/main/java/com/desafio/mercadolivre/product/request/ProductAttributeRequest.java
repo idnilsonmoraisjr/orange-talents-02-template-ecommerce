@@ -1,4 +1,4 @@
-package com.desafio.mercadolivre.product;
+package com.desafio.mercadolivre.product.request;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -7,6 +7,9 @@ import javax.validation.constraints.Size;
 
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import com.desafio.mercadolivre.product.Product;
+import com.desafio.mercadolivre.product.ProductAttribute;
 
 public class ProductAttributeRequest {
 

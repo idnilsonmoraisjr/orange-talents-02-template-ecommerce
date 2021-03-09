@@ -3,8 +3,10 @@ package com.desafio.mercadolivre.product;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.desafio.mercadolivre.category.Category;
+import com.desafio.mercadolivre.product.request.ProductAttributeRequest;
 import com.desafio.mercadolivre.user.User;
 
 @Entity
@@ -57,11 +60,12 @@ public class Product {
 	private User user;
 	@OneToMany( mappedBy = "product", cascade = CascadeType.MERGE)
 	Set<ProductImage> images = new HashSet<>();
+	@OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
+	List<ProductQuestion> questions = new ArrayList<>();
+	
 	
 	@Deprecated
-	public Product() {
-		
-	}
+	public Product() {}
 	
 	public Product(@NotBlank String name, @NotNull @Positive BigDecimal price, @NotNull @Positive int amount,
 			@NotNull @Size(min = 3) Collection<ProductAttributeRequest> productAttributes, @NotBlank @Size(max = 1000) String description,
@@ -121,7 +125,11 @@ public class Product {
 	public Set<ProductImage> getImage() {
 		return images;
 	}
-
+	
+	public List<ProductQuestion> getQuestions() {
+		return questions;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -147,20 +155,12 @@ public class Product {
 		return true;
 	}
 	
-	@Override
-	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", amount=" + amount
-				+ ", productAttributes=" + productAttributes + ", description=" + description + ", productCategory="
-				+ productCategory + ", creationMoment=" + creationMoment + ", user=" + user + ", images=" + images
-				+ "]";
-	}
-
 	public String formatCreationMoment(String pattern) {
 		return this.creationMoment
 				.format(DateTimeFormatter.ofPattern(pattern));
 	}
 
-	public boolean checkProductOwner(User authenticatedUser) {
+	public boolean belongsToTheUser(User authenticatedUser) {
 		if(!this.user.equals(authenticatedUser)) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN,
 					"This product not belong this user!");
@@ -174,4 +174,14 @@ public class Product {
 		
 		this.images.addAll(images);
 	}
+	
+	public boolean canReceiveQuestionFrom(User authenticatedUser) {
+		 if(this.user.getId().equals(authenticatedUser.getId())) {
+			 throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+						"A user should not be able to ask questions about the product they own!!");
+		 }
+		return true;
+	}
+
+	
 }

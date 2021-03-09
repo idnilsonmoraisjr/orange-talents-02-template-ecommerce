@@ -1,4 +1,4 @@
-package com.desafio.mercadolivre.product;
+package com.desafio.mercadolivre.product.request;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,10 +17,11 @@ import javax.validation.constraints.Size;
 import org.springframework.util.Assert;
 
 import com.desafio.mercadolivre.category.Category;
+import com.desafio.mercadolivre.product.Product;
 import com.desafio.mercadolivre.shared.ExistsId;
 import com.desafio.mercadolivre.user.User;
 
-public class NewProductPostRequest {
+public class NewProductRequest {
 
 	@NotBlank
 	private String name;
@@ -41,9 +42,9 @@ public class NewProductPostRequest {
 	@ExistsId(domainClass = Category.class, fieldName="id")
 	private Long categoryId;
 	
-	public NewProductPostRequest() {}
+	public NewProductRequest() {}
 	
-	public NewProductPostRequest(@NotBlank String name, @NotNull @Positive BigDecimal price, @NotNull @Positive int amount,
+	public NewProductRequest(@NotBlank String name, @NotNull @Positive BigDecimal price, @NotNull @Positive int amount,
 			@NotNull @Valid List<ProductAttributeRequest> productAttributes, @NotBlank @Size(max = 1000) String description,
 			@NotNull Long categoryId) {
 		this.name = name;

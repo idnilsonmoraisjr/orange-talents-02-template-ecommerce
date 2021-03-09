@@ -67,4 +67,8 @@ public class ProductImage {
 	public String toString() {
 		return "ProductImage [id=" + id + ", link=" + link + "]";
 	}
+
+	public String getLink() {
+		return link;
+	}
 }

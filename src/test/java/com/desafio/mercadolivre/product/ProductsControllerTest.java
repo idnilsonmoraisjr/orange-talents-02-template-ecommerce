@@ -16,10 +16,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.desafio.mercadolivre.category.Category;
+import com.desafio.mercadolivre.product.request.NewProductRequest;
+import com.desafio.mercadolivre.product.request.ProductAttributeRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("test")
 class ProductsControllerTest {
 
 	@Autowired
@@ -50,7 +54,7 @@ class ProductsControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.post("/products")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProductPostRequest(
+				.content(objectMapper.writeValueAsString(new NewProductRequest(
 						"Headphone", new BigDecimal("150"), 15, productAttributes, "A simple description",
 						1L)))
 				).andExpect(
@@ -67,7 +71,7 @@ class ProductsControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.post("/products")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProductPostRequest(
+				.content(objectMapper.writeValueAsString(new NewProductRequest(
 						"Headphone", new BigDecimal("150"), 15, productAttributes, "A simple description",
 						 1L)))
 				).andExpect(

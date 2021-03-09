@@ -1,13 +1,14 @@
 package com.desafio.mercadolivre.product.response;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.desafio.mercadolivre.category.CategoryResponseDTO;
 import com.desafio.mercadolivre.product.Product;
-import com.desafio.mercadolivre.product.ProductAttribute;
 
-public class NewProductResponseDTO {
+public class ProductResponseDTO {
 
 	private static final String FORMAT = "dd/MM/yyyy HH:mm:ss";
 	
@@ -15,58 +16,72 @@ public class NewProductResponseDTO {
 	private String name;
 	private BigDecimal price;
 	private int amount;
-	private Set<ProductAttribute> productAttributes;
+	private Set<ProductAttributeResponseDTO> productAttributes;
 	private String description;
 	private CategoryResponseDTO productCategory;
 	private String creationMoment;
+	private Set<ProductImageResponseDTO> images = new HashSet<>();	
 	
-	public NewProductResponseDTO(Product product) {
+	public ProductResponseDTO(Product product) {
 		this.id = product.getId();
 		this.name = product.getName();
 		this.price = product.getPrice();
 		this.amount = product.getAmount();
-		this.productAttributes = product.getProductAttributes();
+		this.productAttributes.addAll(product.getProductAttributes()
+				.stream()
+				.map(attribute -> new ProductAttributeResponseDTO(attribute))
+			.collect(Collectors.toSet()));
 		this.description = product.getDescription();
 		this.productCategory = new CategoryResponseDTO(product.getProductCategory());
 		this.creationMoment = product.formatCreationMoment(FORMAT);
+		this.images.addAll(product.getImage()
+				.stream()
+				.map(image -> new ProductImageResponseDTO(image))
+			.collect(Collectors.toSet()));
 	}
+
 
 	public Long getId() {
 		return id;
 	}
 
+
 	public String getName() {
 		return name;
 	}
+
 
 	public BigDecimal getPrice() {
 		return price;
 	}
 
+
 	public int getAmount() {
 		return amount;
 	}
 
-	public Set<ProductAttribute> getProductAttributes() {
+
+	public Set<ProductAttributeResponseDTO> getProductAttributes() {
 		return productAttributes;
 	}
+
 
 	public String getDescription() {
 		return description;
 	}
 
+
 	public CategoryResponseDTO getProductCategory() {
 		return productCategory;
 	}
+
 
 	public String getCreationMoment() {
 		return creationMoment;
 	}
 
-	@Override
-	public String toString() {
-		return "NewProductResponseDTO [id=" + id + ", name=" + name + ", price=" + price + ", amount=" + amount
-				+ ", productAttributes=" + productAttributes + ", description=" + description + ", productCategory="
-				+ productCategory + ", creationMoment=" + creationMoment + "]";
+
+	public Set<ProductImageResponseDTO> getImages() {
+		return images;
 	}
 }

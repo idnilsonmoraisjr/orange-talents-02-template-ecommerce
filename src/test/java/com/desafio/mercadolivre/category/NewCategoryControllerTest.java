@@ -44,7 +44,7 @@ public class NewCategoryControllerTest {
 	@DisplayName("Should create a category succesfully whithout parent category and return 200 ")
 	@WithUserDetails("user6@email.com")
 	public void shouldCreateCategorySuccessfully_WhenIdParentCategoryIsEmpty() throws Exception {
-		NewCategoryPostRequest request = new NewCategoryPostRequest();
+		NewCategoryRequest request = new NewCategoryRequest();
 		request.setName("Test");
 		
 		mockMvc.perform(post("/categories")
@@ -64,7 +64,7 @@ public class NewCategoryControllerTest {
 	@DisplayName("Should create a category succesfully whit parent category and return 200")
 	@WithUserDetails("user6@email.com")
 	public void shouldCreateCategorySuccessfully_WhenIdParentCategoryIsPresent() throws Exception {
-		NewCategoryPostRequest requestParent = new NewCategoryPostRequest();
+		NewCategoryRequest requestParent = new NewCategoryRequest();
 		requestParent.setName("Parent");
 		
 		mockMvc.perform(post("/categories")
@@ -72,7 +72,7 @@ public class NewCategoryControllerTest {
 				.content(toJson(requestParent)))
 		.andExpect(status().isOk());
 		
-		NewCategoryPostRequest request = new NewCategoryPostRequest();
+		NewCategoryRequest request = new NewCategoryRequest();
 		request.setName("Test");
 		request.setIdParentCategory(1L);
 		
@@ -94,7 +94,7 @@ public class NewCategoryControllerTest {
 	@DisplayName("Should fail to create a category when category's name already exists and return 400")
 	@WithUserDetails("user6@email.com")
 	public void shouldFailCreateCategory_WhenNameAlreadyExists() throws Exception {
-		NewCategoryPostRequest request = new NewCategoryPostRequest();
+		NewCategoryRequest request = new NewCategoryRequest();
 		request.setName("Test");
 		
 		Category category = request.toModel(entityManager);
@@ -114,13 +114,13 @@ public class NewCategoryControllerTest {
 	@DisplayName("Should fail to create a category when parent's id not exists")
 	@WithUserDetails("user6@email.com")
 	public void shouldFailCreateCategory_WhenParentNotExists() throws Exception {
-		NewCategoryPostRequest requestParent = new NewCategoryPostRequest();
+		NewCategoryRequest requestParent = new NewCategoryRequest();
 		requestParent.setName("Test");
 		
 		Category category = requestParent.toModel(entityManager);
 		entityManager.persist(category);
 		
-		NewCategoryPostRequest request = new NewCategoryPostRequest();
+		NewCategoryRequest request = new NewCategoryRequest();
 		request.setName("Test");
 		request.setIdParentCategory(2L);
 	
@@ -132,7 +132,7 @@ public class NewCategoryControllerTest {
 		assertEquals(requestParent.getName(),category.getName());
 	}
 	
-	private String toJson(NewCategoryPostRequest request) throws JsonProcessingException {
+	private String toJson(NewCategoryRequest request) throws JsonProcessingException {
 		return mapper.writeValueAsString(request);
 	}
 }

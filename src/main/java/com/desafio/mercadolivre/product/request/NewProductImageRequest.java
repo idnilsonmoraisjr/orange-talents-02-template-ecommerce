@@ -1,4 +1,4 @@
-package com.desafio.mercadolivre.product;
+package com.desafio.mercadolivre.product.request;
 
 import java.util.ArrayList;
 import java.util.List;

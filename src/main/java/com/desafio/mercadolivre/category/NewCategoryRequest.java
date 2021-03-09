@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 import com.desafio.mercadolivre.shared.ExistsId;
 import com.desafio.mercadolivre.shared.UniqueValue;
 
-public class NewCategoryPostRequest {
+public class NewCategoryRequest {
 
 	@NotBlank
 	@UniqueValue(domainClass=Category.class, fieldName= "name")
