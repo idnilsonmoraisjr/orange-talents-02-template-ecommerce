@@ -9,4 +9,8 @@ public class ProductImageResponseDTO {
 	public ProductImageResponseDTO(ProductImage productImage) {
 		this.link = productImage.getLink();
 	}
+
+	public String getLink() {
+		return link;
+	}
 }

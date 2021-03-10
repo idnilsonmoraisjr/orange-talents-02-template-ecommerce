@@ -13,6 +13,16 @@ public class ProductImpressionResponseDTO {
 		this.title = productImpression.getTitle();
 		this.description = productImpression.getDescription();
 	}
-	
-	
+
+	public Double getGrade() {
+		return grade;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
 }

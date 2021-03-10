@@ -11,4 +11,12 @@ public class ProductAttributeResponseDTO {
 		this.name = productAttribute.getName();
 		this.description = productAttribute.getDescription();
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
 }

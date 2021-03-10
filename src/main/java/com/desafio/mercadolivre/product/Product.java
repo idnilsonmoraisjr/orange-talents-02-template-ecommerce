@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -60,8 +62,10 @@ public class Product {
 	private User user;
 	@OneToMany( mappedBy = "product", cascade = CascadeType.MERGE)
 	Set<ProductImage> images = new HashSet<>();
-	@OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "product")
 	List<ProductQuestion> questions = new ArrayList<>();
+	@OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
+	List<ProductImpression> impressions = new ArrayList<>();
 	
 	
 	@Deprecated
@@ -130,6 +134,10 @@ public class Product {
 		return questions;
 	}
 	
+	public List<ProductImpression> getImpressions() {
+		return impressions;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -178,10 +186,41 @@ public class Product {
 	public boolean canReceiveQuestionFrom(User authenticatedUser) {
 		 if(this.user.getId().equals(authenticatedUser.getId())) {
 			 throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-						"A user should not be able to ask questions about the product they own!!");
+						"A user should not be able to ask questions about the product they own!");
 		 }
 		return true;
 	}
 
+	public <T> Set<T> imagesOf(Function<ProductImage, T> function) {
+		return this.images.stream()
+				.map(function)
+				.collect(Collectors.toSet());
+	}
 	
+	public <T> Set<T> attributesOf(Function<ProductAttribute, T> function) {
+		return this.productAttributes.stream()
+				.map(function)
+				.collect(Collectors.toSet());
+	}
+	
+	public <T> List<T> impressionsOf(Function<ProductImpression, T> function) {
+		return this.impressions.stream()
+				.map(function)
+				.collect(Collectors.toList());
+	}
+	
+	public <T> List<T> questionsOf(Function<ProductQuestion, T> function) {
+		return this.questions.stream()
+				.map(function)
+				.collect(Collectors.toList());
+	}
+	
+	public double gradeAverageImpressions() {
+		List<Double> grades =  impressionsOf(impression -> impression.getGrade());
+		OptionalDouble gradeAverage = grades.stream()
+				.mapToDouble(grade -> grade)
+				.average();
+				
+		return gradeAverage.orElse(0.0);
+	}
 }

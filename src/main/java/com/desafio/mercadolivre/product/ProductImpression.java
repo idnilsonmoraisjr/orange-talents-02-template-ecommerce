@@ -61,4 +61,8 @@ public class ProductImpression {
 	public String getDescription() {
 		return description;
 	}
+	
+	public Product getProduct() {
+		return product;
+	}
 }
