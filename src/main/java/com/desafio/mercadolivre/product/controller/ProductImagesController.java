@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,12 +36,14 @@ public class ProductImagesController {
 	public ResponseEntity<?> addImage(@PathVariable("id") Long id, @Valid NewProductImageRequest request,  @AuthenticationPrincipal User user) {
 		
 		Set<String> links = uploaderTest.send(request.getImages());
-		Optional<Product> product = Optional.ofNullable(entityManager.find(Product.class, id));
-		Assert.state(product.isPresent(), "Product not found!");
-		product.get().belongsToTheUser(user);
-		product.get().checkImages(links);
+		Optional<Product> optionalProduct = Optional.ofNullable(entityManager.find(Product.class, id));
+		if(optionalProduct.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		optionalProduct.get().belongsToTheUser(user);
+		optionalProduct.get().checkImages(links);
 		
-		entityManager.merge(product.get());
+		entityManager.merge(optionalProduct.get());
 		
 		return ResponseEntity.ok().build();
 	}

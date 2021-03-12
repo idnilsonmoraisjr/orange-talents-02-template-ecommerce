@@ -15,7 +15,7 @@ public class ProductResponseDTO {
 	private Long id;
 	private String name;
 	private BigDecimal price;
-	private int amount;
+	private int quantity;
 	private Set<ProductAttributeResponseDTO> productAttributes;
 	private String description;
 	private CategoryResponseDTO productCategory;
@@ -26,7 +26,7 @@ public class ProductResponseDTO {
 		this.id = product.getId();
 		this.name = product.getName();
 		this.price = product.getPrice();
-		this.amount = product.getAmount();
+		this.quantity = product.getQuantity();
 		this.productAttributes.addAll(product.getProductAttributes()
 				.stream()
 				.map(attribute -> new ProductAttributeResponseDTO(attribute))
@@ -56,8 +56,8 @@ public class ProductResponseDTO {
 	}
 
 
-	public int getAmount() {
-		return amount;
+	public int getQuantity() {
+		return quantity;
 	}
 
 

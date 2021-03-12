@@ -43,7 +43,7 @@ public class ProductQuestion {
 		Assert.isTrue(StringUtils.hasLength(title), "Title must not be blank!");
 		Assert.isTrue(user != null, "The User must not be null");
 		Assert.isTrue(product != null, "The Product must not be null");
-		Assert.isTrue(product.canReceiveQuestionFrom(user), "AA user should not be able to ask questions about the product they own!");
+		Assert.isTrue(product.mayBeInterestOf(user), "A user should not be able to be interested in the product he owns!");
 		this.title = title;
 		this.user = user;
 		this.product = product;

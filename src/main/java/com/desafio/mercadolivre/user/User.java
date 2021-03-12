@@ -36,7 +36,7 @@ public class User implements UserDetails{
 	@Length(min = 6)
 	private String password;
 	@NotNull
-	@Column(name = "creation_moment")
+	@Column(name = "creation_moment", updatable = false)
 	private LocalDateTime creationMoment = LocalDateTime.now();
 	
 	@Deprecated
@@ -98,7 +98,6 @@ public class User implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

@@ -4,12 +4,11 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.Assert;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -48,9 +47,12 @@ public class ProductsController {
 	}
 	
 	@GetMapping("/{id}")
+	@Transactional(readOnly = true)
 	public ResponseEntity<ProductDetailResponseDTO> details(@PathVariable("id") Long id) {
 		Optional<Product> product = Optional.ofNullable(entityManager.find(Product.class, id)); 
-		Assert.state(product.isPresent(), "Product not found!");
+		if(product.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
 		
 		ProductDetailResponseDTO productDetailsResponse = new ProductDetailResponseDTO(product.get());
 		return ResponseEntity.ok(productDetailsResponse);

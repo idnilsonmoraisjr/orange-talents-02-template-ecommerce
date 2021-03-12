@@ -14,7 +14,7 @@ public class NewProductResponseDTO {
 	private Long id;
 	private String name;
 	private BigDecimal price;
-	private int amount;
+	private int quantity;
 	private Set<ProductAttribute> productAttributes;
 	private String description;
 	private CategoryResponseDTO productCategory;
@@ -24,7 +24,7 @@ public class NewProductResponseDTO {
 		this.id = product.getId();
 		this.name = product.getName();
 		this.price = product.getPrice();
-		this.amount = product.getAmount();
+		this.quantity = product.getQuantity();
 		this.productAttributes = product.getProductAttributes();
 		this.description = product.getDescription();
 		this.productCategory = new CategoryResponseDTO(product.getProductCategory());
@@ -43,8 +43,8 @@ public class NewProductResponseDTO {
 		return price;
 	}
 
-	public int getAmount() {
-		return amount;
+	public int getQuantity() {
+		return quantity;
 	}
 
 	public Set<ProductAttribute> getProductAttributes() {
@@ -61,12 +61,5 @@ public class NewProductResponseDTO {
 
 	public String getCreationMoment() {
 		return creationMoment;
-	}
-
-	@Override
-	public String toString() {
-		return "NewProductResponseDTO [id=" + id + ", name=" + name + ", price=" + price + ", amount=" + amount
-				+ ", productAttributes=" + productAttributes + ", description=" + description + ", productCategory="
-				+ productCategory + ", creationMoment=" + creationMoment + "]";
 	}
 }

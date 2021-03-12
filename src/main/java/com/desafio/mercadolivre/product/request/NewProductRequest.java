@@ -30,7 +30,7 @@ public class NewProductRequest {
 	private BigDecimal price;
 	@NotNull
 	@Positive
-	private int amount;
+	private int quantity;
 	@NotNull
 	@Size(min = 3)
 	@Valid
@@ -44,12 +44,12 @@ public class NewProductRequest {
 	
 	public NewProductRequest() {}
 	
-	public NewProductRequest(@NotBlank String name, @NotNull @Positive BigDecimal price, @NotNull @Positive int amount,
+	public NewProductRequest(@NotBlank String name, @NotNull @Positive BigDecimal price, @NotNull @Positive int quantity,
 			@NotNull @Valid List<ProductAttributeRequest> productAttributes, @NotBlank @Size(max = 1000) String description,
 			@NotNull Long categoryId) {
 		this.name = name;
 		this.price = price;
-		this.amount = amount;
+		this.quantity = quantity;
 		Assert.isTrue(productAttributes.size() >= 3, "The product must have at least 3 characteristics");
 		this.productAttributes.addAll(productAttributes);
 		this.description = description;
@@ -60,7 +60,7 @@ public class NewProductRequest {
 		Optional<Category> optionalCategory = Optional.ofNullable(entityManager.find(Category.class, categoryId));
 		Assert.state(optionalCategory.isPresent(), "Category does not exist for the given id!");
 		
-		return new Product(this.name, this.price, this.amount, this.productAttributes, this.description, optionalCategory.get(), user);
+		return new Product(this.name, this.price, this.quantity, this.productAttributes, this.description, optionalCategory.get(), user);
 	}
 
 	public String getName() {
@@ -71,8 +71,8 @@ public class NewProductRequest {
 		return price;
 	}
 
-	public int getAmount() {
-		return amount;
+	public int getQuantity() {
+		return quantity;
 	}
 
 	public List<ProductAttributeRequest> getProductAttributes() {

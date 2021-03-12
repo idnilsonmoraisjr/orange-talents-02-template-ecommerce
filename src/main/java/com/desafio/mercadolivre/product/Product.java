@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -43,8 +44,8 @@ public class Product {
 	private String name;
 	@NotNull @Positive
 	private BigDecimal price;
-	@NotNull @Positive
-	private int amount;
+	@NotNull 
+	private int quantity;
 	@NotNull
 	@OneToMany( mappedBy = "product", cascade = CascadeType.PERSIST)
 	@Size(min = 3)
@@ -56,6 +57,7 @@ public class Product {
 	@NotNull 
 	private Category productCategory;
 	@NotNull
+	@Column(name = "creation_moment", updatable = false)
 	private LocalDateTime creationMoment = LocalDateTime.now();
 	@NotNull
 	@ManyToOne
@@ -67,19 +69,18 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
 	List<ProductImpression> impressions = new ArrayList<>();
 	
-	
 	@Deprecated
 	public Product() {}
 	
-	public Product(@NotBlank String name, @NotNull @Positive BigDecimal price, @NotNull @Positive int amount,
+	public Product(@NotBlank String name, @NotNull @Positive BigDecimal price, @NotNull @Positive int quantity,
 			@NotNull @Size(min = 3) Collection<ProductAttributeRequest> productAttributes, @NotBlank @Size(max = 1000) String description,
 			@NotNull Category productCategory, @NotNull User user) {
 			Assert.isTrue(StringUtils.hasLength(name), "Name must not be blank!");
-			Assert.isTrue(amount > 0, "The product must have a amount higher than zero!");
+			Assert.isTrue(quantity > 0, "The product must have a quantity higher than zero!");
 			Assert.isTrue(StringUtils.hasLength(description), "Description must not be blank!");
 				this.name = name;
 				this.price = price;
-				this.amount = amount;
+				this.quantity = quantity;
 				this.productAttributes.addAll(productAttributes.stream()
 						.map(attribute -> attribute.toModel(this))
 						.collect(Collectors.toSet()));
@@ -102,8 +103,8 @@ public class Product {
 		return price;
 	}
 
-	public int getAmount() {
-		return amount;
+	public int getQuantity() {
+		return quantity;
 	}
 
 	public Set<ProductAttribute> getProductAttributes() {
@@ -179,14 +180,13 @@ public class Product {
 	public void checkImages(Set<String> links) {
 		Set<ProductImage> images = links.stream().map(link -> new ProductImage(link, this))
 				.collect(Collectors.toSet());
-		
 		this.images.addAll(images);
 	}
 	
-	public boolean canReceiveQuestionFrom(User authenticatedUser) {
+	public boolean mayBeInterestOf(User authenticatedUser) {
 		 if(this.user.getId().equals(authenticatedUser.getId())) {
 			 throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-						"A user should not be able to ask questions about the product they own!");
+						"A user should not be able to be interested in the product he owns!!");
 		 }
 		return true;
 	}
@@ -222,5 +222,14 @@ public class Product {
 				.average();
 				
 		return gradeAverage.orElse(0.0);
+	}
+
+	public boolean descreasesStock(@Positive int quantity) {
+		Assert.isTrue(quantity > 0, "The product must have a quantity higher than zero!");
+		if(this.quantity>=quantity) {
+			this.quantity-=quantity;
+			return true;
+		}
+		return false;
 	}
 }

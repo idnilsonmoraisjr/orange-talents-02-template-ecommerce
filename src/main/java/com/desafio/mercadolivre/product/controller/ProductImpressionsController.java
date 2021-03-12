@@ -33,12 +33,14 @@ public class ProductImpressionsController {
 	public ResponseEntity<?> addImpression(@PathVariable("id") Long id, 
 			@RequestBody @Valid NewProductImpressionRequest request,  @AuthenticationPrincipal User user) {
 	
-		Optional<Product> product = Optional.ofNullable(entityManager.find(Product.class, id));
+		Optional<Product> optionalProduct = Optional.ofNullable(entityManager.find(Product.class, id));
 		
-		Assert.state(product.isPresent(), "Product not found!");
-		product.get().belongsToTheUser(user);
+		if(optionalProduct.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		optionalProduct.get().belongsToTheUser(user);
 	
-		ProductImpression impression = request.toModel(user, product);
+		ProductImpression impression = request.toModel(user, optionalProduct);
 		entityManager.persist(impression);
 		return ResponseEntity.ok().build();
 	}

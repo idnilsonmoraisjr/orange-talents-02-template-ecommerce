@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.desafio.mercadolivre.category.Category;
@@ -59,4 +60,40 @@ class ProductTest {
 				Arguments.of(
 							List.of(new ProductAttributeRequest("key3", "value3"))));
 	}
+
+	@DisplayName("Should accept purchase quantity")
+	@ParameterizedTest
+	@CsvSource( {"1,1,true", "1,2,false", "4,2,true", "1,5,false" })
+	void test3(int stock, int quantity, boolean expectedResult) {
+		List<ProductAttributeRequest> attributes = List.of(
+				new ProductAttributeRequest("key", "value"),
+				new ProductAttributeRequest("key2", "value2"),
+				new ProductAttributeRequest("key3", "value3"));
+		Category category = new Category("Category");
+		User owner = new User("owner@email.com",
+				"123456");
+		Product product = new Product("name", BigDecimal.TEN, stock,
+				attributes, "description", category, owner);
+		boolean result = product.descreasesStock(quantity);
+		Assertions.assertEquals(expectedResult, result);
+	}
+	
+	@DisplayName("Does not accept purchase quantity less than or equal to zero")
+	@ParameterizedTest
+	@CsvSource({ "0", "-1", "-100"})
+	void test4(int quantity) throws Exception {
+		List<ProductAttributeRequest> attributes = List.of(
+				new ProductAttributeRequest("key", "value"),
+				new ProductAttributeRequest("key2", "value2"),
+				new ProductAttributeRequest("key3", "value3"));
+		Category category = new Category("Category");
+		User owner = new User("owner@email.com",
+				"123456");
+		Product product = new Product("name", BigDecimal.TEN, 10,
+				attributes, "description", category, owner);
+		Assertions.assertThrows(IllegalArgumentException.class,() -> {
+			product.descreasesStock(quantity);
+		});
+	}
+	
 }

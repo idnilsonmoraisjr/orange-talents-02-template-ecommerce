@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,14 +40,16 @@ public class ProductQuestionsController {
 	public ResponseEntity<?> askQuestion(@RequestBody @Valid NewProductQuestionRequest request,
 			@PathVariable("id") Long id, @AuthenticationPrincipal User user) {
 
-		Optional<Product> product = Optional.ofNullable(entityManager.find(Product.class, id));
-		Assert.state(product.isPresent(), "Product not found!");
+		Optional<Product> optionalProduct = Optional.ofNullable(entityManager.find(Product.class, id));
+		if(optionalProduct.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
 		
-		ProductQuestion question = request.toModel(user, product.get());
+		ProductQuestion question = request.toModel(user, optionalProduct.get());
 		entityManager.persist(question);
 		
-		mail.notifyUser(question);
-		return new ResponseEntity<>(thisProductQuestions(product), HttpStatus.OK);
+		mail.notifyUserQuestion(question);
+		return new ResponseEntity<>(thisProductQuestions(optionalProduct), HttpStatus.OK);
 	}
 	
 	public List<ProductQuestionsResponseDTO> thisProductQuestions (Optional<Product> product) {
