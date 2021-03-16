@@ -1,9 +1,9 @@
 package com.desafio.mercadolivre.purchase.response;
 
 import com.desafio.mercadolivre.product.response.ProductDetailResponseDTO;
-import com.desafio.mercadolivre.purchase.PaymentMethod;
 import com.desafio.mercadolivre.purchase.Purchase;
-import com.desafio.mercadolivre.purchase.PurchaseStatus;
+import com.desafio.mercadolivre.purchase.enums.PaymentMethod;
+import com.desafio.mercadolivre.purchase.enums.PurchaseStatus;
 import com.desafio.mercadolivre.user.response.UserResponseDTO;
 
 public class PurchaseResponseDTO {

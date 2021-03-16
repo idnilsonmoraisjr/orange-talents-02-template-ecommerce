@@ -4,8 +4,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import com.desafio.mercadolivre.product.Product;
-import com.desafio.mercadolivre.purchase.PaymentMethod;
 import com.desafio.mercadolivre.purchase.Purchase;
+import com.desafio.mercadolivre.purchase.enums.PaymentMethod;
 import com.desafio.mercadolivre.user.User;
 
 public class NewPurchaseRequest {

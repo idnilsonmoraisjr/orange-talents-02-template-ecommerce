@@ -2,7 +2,6 @@ package com.desafio.mercadolivre.user;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,7 +10,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
